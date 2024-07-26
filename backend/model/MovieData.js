@@ -3,7 +3,7 @@ const movieSchema=mongoose.Schema({
     movieName:String,
     category:String,
     director:String,
-    releaseYear:String,
+    releaseYear:String
 })
-const MovieData=mongoose.model('movie',movieSchema);
+const MovieData=mongoose.model('movies',movieSchema);
 module.exports=MovieData

@@ -1,38 +1,59 @@
 const express=require('express')
-const cors=require('cors')
+const cors=require('cors');
 const app=new express();
-const PORT= 4000;
-// connect the connection.js to server file
+const PORT=4000;
+//connect the connection.js to server file
 require('./connection');
 const movieData=require('./model/MovieData')
 
 app.use(express.json());
 app.use(cors());
-// API endpoint to fetch data from DB
-app.get('/list-movies',async(req,res)=>{
+//API endpoint to fetch data from DB
+app.get('/movies',async(req,res)=>{
 try{
     const data=await movieData.find();
     res.send(data);
 }
 catch(error){
-    console.log("ERROR!")
+console.log("Error occurs");
 }
+
 })
-// /API endpoint to post a new movie data to the DB
-app.post('/new-movie',async(req,res)=>{
+app.post('/new-movies',async(req,res)=>{
     try{
         var item=req.body;
         const dataitem=new movieData(item);
         const saveddata=await dataitem.save();
         res.send('post successful');
-}
- catch(error){
+    }
+    catch(error){
     console.log("Error occurs");
- }
-
-}
-)
+    }
+    
+    })
+// API endpoint for deleting the movie document
+app.delete('/movieremoval/:id',async(req,res)=>{
+    try{
+        await movieData.findByIdAndDelete(req.params.id);
+        res.send('Deleted successfully');
+    }
+    catch(error){
+        console.log(error);
+    }
+})
+// for updating
+app.put('/movie-updation/:id', async(req,res)=>{
+    try{
+        await movieData.findByIdAndUpdate(req,params.id,req.body)
+        res.send("updated successfully")
+    }
+    catch(error){
+        console.log(error);
+    }
+});
 // checking whether the server is live or not
 app.listen(PORT,()=>{
-console.log("Server is running on Port Number:4000");
+    console.log("Server is running on Port Number:4000");
 })
+
+
